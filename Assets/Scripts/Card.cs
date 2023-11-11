@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 public class Card : MonoBehaviour
@@ -6,12 +7,11 @@ public class Card : MonoBehaviour
 
     public Colour color;
     
-    public void PlayAnimation(Slot targetSlot,float duration,Ease e)
+    public Tween PlayAnimation(Slot targetSlot,float duration,Ease e,float offset)
     {
 
         var rotationVector = new Vector3();
         var currentRotation = transform.rotation.eulerAngles;
-        Debug.Log(currentRotation);
 
         switch (GetMovementDirection(targetSlot.transform))
         {
@@ -56,12 +56,15 @@ public class Card : MonoBehaviour
                 break;
             }
         }
-        
-        Debug.Log(rotationVector);
 
+        var position = targetSlot.transform.position;
+        var p = new Vector3(position.x, 0 + offset, position.z);
         
-        transform.DOJump(targetSlot.transform.position,2,1,duration).SetEase(e);
-        transform.DORotate(rotationVector,duration);
+        Tween j = transform.DOJump(p,3,1,duration).SetEase(e);
+        transform.DORotate(rotationVector, duration).SetEase(e);
+
+        return j;
+
     }
     
     private Direction GetMovementDirection(Transform target)

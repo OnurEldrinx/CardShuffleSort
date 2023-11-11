@@ -1,10 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    private LinkedList<Card> _cards;
+    public Stack<Card> _cards;
     public List<Card> cardList;
     public SlotStatus status;
     private bool _isEmpty;
@@ -18,7 +20,7 @@ public class Slot : MonoBehaviour
 
         _isEmpty = true;
         
-        _cards = new LinkedList<Card>();
+        _cards = new Stack<Card>();
 
         /*if (transform.childCount > 0)
         {
@@ -32,15 +34,17 @@ public class Slot : MonoBehaviour
         {
             for (var i = 0; i < cardList.Count; i++)
             {
-                _cards.AddLast(cardList[i]);
+                _cards.Push(cardList[i]);
             }
         }
 
         if (_cards.Count > 0)
         {
             _isEmpty = false;
-            _topCardColor = _cards.Last.Value.color;
+            _topCardColor = _cards.Last().color;
         }
+        
+        Debug.Log(_cards.Count);
 
     }
 
@@ -63,23 +67,40 @@ public class Slot : MonoBehaviour
                 //_cards.Last.Value.PlayAnimation(targetSlot,2.75f,Ease.Unset);
             }else if (PlayerController.fromSlot != null && PlayerController.toSlot == null)
             {
-
                 PlayerController.toSlot = this;
                 isSelectedFirst = false;
                 isTarget = true;
 
-                Card last = PlayerController.fromSlot._cards.Last.Value;
+
+                var d = 0.5f;
+                var count = PlayerController.fromSlot._cards.Count;
                 
-                last.PlayAnimation(PlayerController.toSlot,0.75f,Ease.Unset);
+
+                float offset = _cards.Count == 0 ? 0 : _cards.Peek().transform.position.y + 0.075f;
+                
+                for (int i = 0; i < count; i++)
+                {
+                    Card last = PlayerController.fromSlot._cards.Pop();
+                    last.PlayAnimation(PlayerController.toSlot, d, Ease.InOutFlash,offset);
+                    _cards.Push(last);
+                    d += 0.05f;
+                    offset += 0.075f;
+                }
+                
+                /*last.PlayAnimation(PlayerController.toSlot,0.75f,Ease.Unset);
                 _cards.AddLast(last);
-                PlayerController.fromSlot._cards.RemoveLast();
+                PlayerController.fromSlot._cards.RemoveLast();*/
+                
                 PlayerController.fromSlot.isSelectedFirst = false;
                 isTarget = false;
                 PlayerController.fromSlot = null;
                 PlayerController.toSlot = null;
+                
             }
             
             
         }
     }
+    
+
 }
