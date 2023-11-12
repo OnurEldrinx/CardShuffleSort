@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -6,100 +5,115 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public Stack<Card> _cards;
     public List<Card> cardList;
     public SlotStatus status;
-    private bool _isEmpty;
+
+    private BoxCollider _collider;
+    private const float ColliderSizeInc = 0.08f;
+    public bool _isEmpty;
     private Colour _topCardColor;
-    public bool isSelectedFirst;
-    public bool isTarget;
-    public Slot targetSlot;
+    private Stack<Card> _cards;
     
     private void Start()
     {
-
+        _collider = GetComponent<BoxCollider>();
         _isEmpty = true;
-        
         _cards = new Stack<Card>();
-
-        /*if (transform.childCount > 0)
-        {
-            for (var i = 0; i < transform.childCount; i++)
-            {
-                if(transform.GetChild(i).TryGetComponent<Card>(out var current)) _cards.AddLast(current);
-            }
-        }*/
         
         if (cardList.Count > 0)
         {
-            for (var i = 0; i < cardList.Count; i++)
+            foreach (var c in cardList)
             {
-                _cards.Push(cardList[i]);
+                _cards.Push(c);
+                _collider.size += new Vector3(0, 0, ColliderSizeInc);
             }
+
+            var center = _collider.center;
+            _collider.center = new Vector3(center.x, center.y, _collider.size.z / 2);
+
         }
 
-        if (_cards.Count > 0)
-        {
-            _isEmpty = false;
-            _topCardColor = _cards.Last().color;
-        }
-        
-        Debug.Log(_cards.Count);
+        if (_cards.Count <= 0) return;
+        _isEmpty = false;
+        _topCardColor = _cards.Last().color;
 
+    }
+
+    private void Update()
+    {
+        _isEmpty = _cards.Count <= 0;
     }
 
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
         {
-
-            if (status != SlotStatus.Active)
-            {
-                return;
-            }
             
-            if (PlayerController.fromSlot == null)
+            if (status != SlotStatus.Active) return;
+            
+            if (PlayerController.Instance.fromSlot == null && !_isEmpty && !PlayerController.Instance.fromToPair.ContainsValue(this))
             {
-                PlayerController.fromSlot = this;
-                PlayerController.toSlot = null;
-                isSelectedFirst = true;
-                isTarget = false;
-                //_cards.Last.Value.PlayAnimation(targetSlot,2.75f,Ease.Unset);
-            }else if (PlayerController.fromSlot != null && PlayerController.toSlot == null)
-            {
-                PlayerController.toSlot = this;
-                isSelectedFirst = false;
-                isTarget = true;
-
-
-                var d = 0.5f;
-                var count = PlayerController.fromSlot._cards.Count;
                 
+                PlayerController.Instance.fromSlot = this;
+                PlayerController.Instance.toSlot = null;
+                
+            }else if (PlayerController.Instance.fromSlot != null && PlayerController.Instance.toSlot == null && PlayerController.Instance.fromSlot != this)
+            {
+                PlayerController.Instance.toSlot = this;
+                
+                PlayerController.Instance.fromToPair.Add(PlayerController.Instance.fromSlot,PlayerController.Instance.toSlot);
+                
+                var d = 0.5f;
+                var count = PlayerController.Instance.fromSlot._cards.Count;
 
                 float offset = _cards.Count == 0 ? 0 : _cards.Peek().transform.position.y + 0.075f;
-                
+
                 for (int i = 0; i < count; i++)
                 {
-                    Card last = PlayerController.fromSlot._cards.Pop();
-                    last.PlayAnimation(PlayerController.toSlot, d, Ease.InOutFlash,offset);
+                    Card last = PlayerController.Instance.fromSlot._cards.Pop();
+                    last.PlayAnimation(PlayerController.Instance.toSlot, d, Ease.InOutSine, offset);
                     _cards.Push(last);
                     d += 0.05f;
                     offset += 0.075f;
+
+                    UpdateColliderSize(1);
+                    PlayerController.Instance.fromSlot.UpdateColliderSize(-1);
+                    
                 }
                 
-                /*last.PlayAnimation(PlayerController.toSlot,0.75f,Ease.Unset);
-                _cards.AddLast(last);
-                PlayerController.fromSlot._cards.RemoveLast();*/
                 
-                PlayerController.fromSlot.isSelectedFirst = false;
-                isTarget = false;
-                PlayerController.fromSlot = null;
-                PlayerController.toSlot = null;
+                UpdateColliderCenter();
+                PlayerController.Instance.fromSlot.UpdateColliderCenter();
+                
+                Invoke(nameof(UpdatePairDictionary),d);
+
+                
+                
                 
             }
             
-            
         }
+        
+        
+    }
+
+    private void UpdatePairDictionary()
+    {
+
+        PlayerController.Instance.fromToPair.Remove(PlayerController.Instance.fromSlot);
+        PlayerController.Instance.fromSlot = null;
+        PlayerController.Instance.toSlot = null;
+    }
+
+    private void UpdateColliderSize(float sign)
+    {
+        _collider.size += new Vector3(0, 0, sign * ColliderSizeInc);
+    }
+
+    private void UpdateColliderCenter()
+    {
+        var center = _collider.center;
+        _collider.center = new Vector3(center.x, center.y, _collider.size.z / 2);
     }
     
 

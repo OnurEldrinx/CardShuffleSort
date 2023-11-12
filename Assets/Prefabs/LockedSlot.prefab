@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 4417786361008242104}
   - component: {fileID: 108881223804487938}
   - component: {fileID: 7351128757901483251}
+  - component: {fileID: 2003010436419688243}
+  - component: {fileID: 1635838637}
+  - component: {fileID: 8219837035132129813}
   m_Layer: 0
   m_Name: LockedSlot
   m_TagString: Untagged
@@ -27,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1089036204436606974}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 125, y: 150, z: 100}
+  m_LocalScale: {x: 125, y: 150, z: 300}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,3 +86,52 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2003010436419688243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089036204436606974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 586044ad93fb4044c979844964f10c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: []
+  status: 2
+  isSelectedFirst: 0
+  isTarget: 0
+  isAnimPlaying: 0
+  _isEmpty: 0
+--- !u!114 &1635838637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089036204436606974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 586044ad93fb4044c979844964f10c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: []
+  status: 2
+  isSelectedFirst: 0
+  isTarget: 0
+  isAnimPlaying: 0
+  _isEmpty: 0
+--- !u!65 &8219837035132129813
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089036204436606974}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0036811726, y: 0.0051536434, z: 0.00028985617}
+  m_Center: {x: 0, y: 0, z: 0}

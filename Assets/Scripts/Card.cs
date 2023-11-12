@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 public class Card : MonoBehaviour
@@ -9,53 +7,22 @@ public class Card : MonoBehaviour
     
     public Tween PlayAnimation(Slot targetSlot,float duration,Ease e,float offset)
     {
-
+        
         var rotationVector = new Vector3();
         var currentRotation = transform.rotation.eulerAngles;
 
-        switch (GetMovementDirection(targetSlot.transform))
+        rotationVector = GetMovementDirection(targetSlot.transform) switch
         {
-            case Direction.North:
-            {
-                rotationVector = new Vector3(currentRotation.x + 180,0,0);
-                break;
-            }
-            case Direction.South:
-            {
-                rotationVector = new Vector3( currentRotation.x - 180,0,0);
-                break;
-            }
-            case Direction.East:
-            {
-                rotationVector = new Vector3(0,0,currentRotation.z - 180);
-                break;
-            }
-            case Direction.West:
-            {
-                rotationVector = new Vector3(0,0,currentRotation.z + 180);
-                break;
-            }
-            case Direction.NorthEast:
-            {
-                rotationVector = new Vector3(currentRotation.x + 180,0,0);
-                break;
-            }
-            case Direction.NorthWest:
-            {
-                rotationVector = new Vector3(currentRotation.x + 180,0,0);
-                break;
-            }
-            case Direction.SouthEast:
-            {
-                rotationVector = new Vector3(currentRotation.x - 180,0,0);
-                break;
-            }
-            case Direction.SouthWest:
-            {
-                rotationVector = new Vector3(currentRotation.x - 180,0,0);
-                break;
-            }
-        }
+            Direction.North => new Vector3(currentRotation.x + 180, 0, 0),
+            Direction.South => new Vector3(currentRotation.x - 180, 0, 0),
+            Direction.East => new Vector3(0, 0, currentRotation.z - 180),
+            Direction.West => new Vector3(0, 0, currentRotation.z + 180),
+            Direction.NorthEast => new Vector3(currentRotation.x + 180, 0, 0),
+            Direction.NorthWest => new Vector3(currentRotation.x + 180, 0, 0),
+            Direction.SouthEast => new Vector3(currentRotation.x - 180, 0, 0),
+            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, 0),
+            _ => rotationVector
+        };
 
         var position = targetSlot.transform.position;
         var p = new Vector3(position.x, 0 + offset, position.z);

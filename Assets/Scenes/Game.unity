@@ -1408,9 +1408,7 @@ MonoBehaviour:
   - {fileID: 443899453}
   - {fileID: 712420577}
   status: 0
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!65 &522785991
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1560,9 +1558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 2
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1 &639359957 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5425052953981215392, guid: 58c5981ddec05194ebe476c8e7eda61f,
@@ -1739,12 +1735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4ac088ebce2894b92962d6b9433f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &730683220 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1089036204436606974, guid: be606f0c373ceb544be54f9382ef83a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1635838633}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &754232712 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2172359335897878577, guid: 60df2b783c5ccad488214748295475ba,
@@ -1997,9 +1987,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 1
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1001 &911598051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2786,9 +2774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 1
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1001 &1300802803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3019,9 +3005,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 1
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1 &1388332883 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5425052953981215392, guid: 58c5981ddec05194ebe476c8e7eda61f,
@@ -3234,6 +3218,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LockedSlot (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1089036204436606974, guid: be606f0c373ceb544be54f9382ef83a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4417786361008242104, guid: be606f0c373ceb544be54f9382ef83a6,
         type: 3}
       propertyPath: m_RootOrder
@@ -3311,9 +3300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 2
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1 &1452305548 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5500059525934469049, guid: 1871bbcf614380548a92afa9e4182825,
@@ -3773,9 +3760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 1
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1001 &1635838633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3851,23 +3836,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1635838633}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1635838637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 730683220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586044ad93fb4044c979844964f10c58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardList: []
-  status: 2
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
 --- !u!1001 &1670029776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4458,9 +4426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 2
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1001 &1954629275
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4666,9 +4632,7 @@ MonoBehaviour:
   - {fileID: 1896407656}
   - {fileID: 754232712}
   status: 0
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!65 &2031774959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4707,12 +4671,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: 0
---- !u!1 &2040132398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1089036204436606974, guid: be606f0c373ceb544be54f9382ef83a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 2003010436419688239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2040497001 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2172359335897878577, guid: 60df2b783c5ccad488214748295475ba,
@@ -5186,23 +5144,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2003010436419688239}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2003010436419688243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2040132398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 586044ad93fb4044c979844964f10c58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardList: []
-  status: 2
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
 --- !u!1001 &2172359334785247045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5545,9 +5486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardList: []
   status: 1
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!1001 &8448230926582275910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5643,9 +5582,7 @@ MonoBehaviour:
   - {fileID: 67018962}
   - {fileID: 1580651175}
   status: 0
-  isSelectedFirst: 0
-  isTarget: 0
-  targetSlot: {fileID: 0}
+  _isEmpty: 0
 --- !u!65 &8448230926582275915
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5657,8 +5594,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0036756282, y: 0.0051458813, z: 0}
-  m_Center: {x: 0, y: 0, z: 0.0000499897}
+  m_Size: {x: 0.0036756338, y: 0.0051458813, z: 0}
+  m_Center: {x: 0, y: 1.90459e-18, z: 0}
 --- !u!1001 &8489279137343154440
 PrefabInstance:
   m_ObjectHideFlags: 0

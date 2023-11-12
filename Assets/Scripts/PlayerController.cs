@@ -1,10 +1,17 @@
-using Unity.VisualScripting;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
-    public static Slot fromSlot;
-    public static Slot toSlot;
-    
-    
+    public Slot fromSlot;
+    public Slot toSlot;
+
+    public Dictionary<Slot,Slot> fromToPair;
+
+    private void Start()
+    {
+        fromToPair = new Dictionary<Slot, Slot>();
+    }
 }
