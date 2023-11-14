@@ -29,7 +29,11 @@ public class Card : MonoBehaviour
         
         
         Tween j = transform.DOJump(p,height,1,duration).SetEase(e).SetDelay(delay);
-        transform.DORotate(rotationVector, duration).SetEase(e).SetDelay(delay);
+        transform.DORotate(rotationVector, duration).SetEase(e).SetDelay(delay).OnComplete(() =>
+        {
+            transform.rotation = Quaternion.Euler(Vector3.zero);
+            
+        });
 
         return j;
 
