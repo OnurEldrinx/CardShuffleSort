@@ -24,5 +24,6 @@ public enum Colour
        Yellow,
        Blue,
        Green,
-       Black
+       Black,
+       Empty
 }

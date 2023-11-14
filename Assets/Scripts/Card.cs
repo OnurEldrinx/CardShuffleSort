@@ -5,7 +5,7 @@ public class Card : MonoBehaviour
 
     public Colour color;
     
-    public Tween PlayAnimation(Slot targetSlot,float duration,Ease e,float offset)
+    public Tween PlayAnimation(Slot targetSlot,float duration,float height,Ease e,float offset,float delay)
     {
         
         var rotationVector = new Vector3();
@@ -27,8 +27,9 @@ public class Card : MonoBehaviour
         var position = targetSlot.transform.position;
         var p = new Vector3(position.x, 0 + offset, position.z);
         
-        Tween j = transform.DOJump(p,3,1,duration).SetEase(e);
-        transform.DORotate(rotationVector, duration).SetEase(e);
+        
+        Tween j = transform.DOJump(p,height,1,duration).SetEase(e).SetDelay(delay);
+        transform.DORotate(rotationVector, duration).SetEase(e).SetDelay(delay);
 
         return j;
 
