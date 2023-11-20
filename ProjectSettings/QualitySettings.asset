@@ -95,7 +95,7 @@ QualitySettings:
     skinWeights: 255
     textureQuality: 0
     anisotropicTextures: 2
-    antiAliasing: 8
+    antiAliasing: 4
     softParticles: 0
     softVegetation: 1
     realtimeReflectionProbes: 1
@@ -118,7 +118,7 @@ QualitySettings:
       type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Android: 1
+    Android: 2
     CloudRendering: 2
     GameCoreScarlett: 2
     GameCoreXboxOne: 2
@@ -128,7 +128,7 @@ QualitySettings:
     PS5: 2
     Server: 0
     Stadia: 2
-    Standalone: 1
+    Standalone: 2
     WebGL: 1
     Windows Store Apps: 2
     XboxOne: 2

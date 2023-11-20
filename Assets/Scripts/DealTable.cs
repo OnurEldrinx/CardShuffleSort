@@ -25,6 +25,9 @@ public class DealTable : MonoBehaviour
         if (cardCount > 0)
         {
             fillImage.sprite = UIManager.Instance.fillerSprites[dealSlot.cardList.Last().color];
+
+            
+            
         }
         else
         {
