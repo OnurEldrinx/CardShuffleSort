@@ -1,8 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -12,7 +11,8 @@ public class UIManager : Singleton<UIManager>
     public Sprite blueFill;
     public Sprite yellowFill;
 
-
+    public Image levelProgressBar;
+    
     public Dictionary<Colour, Sprite> fillerSprites;
 
     public TextMeshProUGUI coinCounterText;

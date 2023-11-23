@@ -8,7 +8,7 @@ public class DealTable : MonoBehaviour
     public Transform fillFrame;
     public Image fillImage;
     public float fillFramePositionOffset;
-    
+
     void Start()
     {
         
@@ -25,8 +25,6 @@ public class DealTable : MonoBehaviour
         if (cardCount > 0)
         {
             fillImage.sprite = UIManager.Instance.fillerSprites[dealSlot.cardList.Last().color];
-
-            
             
         }
         else

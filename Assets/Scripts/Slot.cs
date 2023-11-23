@@ -7,7 +7,8 @@ public class Slot : MonoBehaviour
 {
     public List<Card> cardList; //all cards in the slot
     public SlotStatus status;
-
+    
+    
     private BoxCollider _collider;
     private const float ColliderSizeInc = 0.08f;
     private bool _isEmpty;
@@ -128,7 +129,7 @@ public class Slot : MonoBehaviour
                             if (gameObject.name.Equals("DealTableSlot"))
                             {
                                 transform.parent.GetComponent<DealTable>().fillImage.fillAmount += 0.1f;
-                                
+                                //VFXManager.Instance.PlayParticleAtPosition(last.transform.position);
                             }
                             
                         });
@@ -165,13 +166,75 @@ public class Slot : MonoBehaviour
         _topCardColor = cardList.Last().color;
 
         if (!gameObject.name.Equals("DealTableSlot")) return;
-        if (cardList.Count >= 10)
-        {
-            UIManager.Instance.coinCounterText.text = (cardList.Count * 30).ToString();
-        }
 
+        int c = cardList.Count;
+        _cardCounter = c;
+        if (c < 10) return;
+        PlayerController.Instance.totalCoin += c * 30;
+        UIManager.Instance.coinCounterText.text = PlayerController.Instance.totalCoin.ToString();
+        float timer = 0;
+        for (int i = 0; i < c; i++)
+        {
+            Invoke(nameof(SplashAndDisableCard),timer);
+            timer += PlayerController.Instance.cardDisableTime;
+        }
+        
+        Invoke(nameof(LevelUp),timer+PlayerController.Instance.cardDisableTime);
+        
     }
 
+    private void SplashAndDisableCard()
+    {
+        Card last = cardList.Last();
+        ParticleSystem s = ObjectPoolManager.Instance.GetSplash();
+        s.gameObject.SetActive(true);
+        if (cardList.Remove(last))
+        {
+            last.gameObject.SetActive(false); //return to pool
+            VFXManager.Instance.PlayParticleAtPosition(s,last.transform.position);
+            //UIManager.Instance.levelProgressBar.fillAmount += 0.1f;
+            transform.parent.GetComponent<DealTable>().fillImage.fillAmount -= 0.1f;
+            
+            // Level UP
+            /*if (Math.Abs(UIManager.Instance.levelProgressBar.fillAmount - 1) < 0.001f)
+            {
+                UIManager.Instance.levelProgressBar.fillAmount = 0;
+                PlayerController.Instance.levelNo += 1;
+                UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
+            }*/
+            
+        }
+    }
+
+    private static int _cardCounter;
+    private void LevelUp()
+    {
+        
+        float f = UIManager.Instance.levelProgressBar.fillAmount + (_cardCounter * 0.1f);
+        float extra = f > 1 ? f-1 : 0;
+
+        float d = 0.5f;
+        
+        DOTween.To(()=> UIManager.Instance.levelProgressBar.fillAmount, x=> UIManager.Instance.levelProgressBar.fillAmount = x, 1, d).
+            OnComplete(
+            () =>
+            {
+                
+                if (extra < 0) return;
+                UIManager.Instance.levelProgressBar.fillAmount = 0;
+                DOTween.To(() => UIManager.Instance.levelProgressBar.fillAmount,
+                    x => UIManager.Instance.levelProgressBar.fillAmount = x, extra,
+                    d);
+
+                PlayerController.Instance.levelNo += 1;
+                UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
+                
+            }
+            );
+        
+        
+    }
+    
     private void UpdateColliderSize(float sign)
     {
         _collider.size += new Vector3(0, 0, sign * ColliderSizeInc);

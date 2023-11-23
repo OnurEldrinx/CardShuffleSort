@@ -16,9 +16,16 @@ public class PlayerController : Singleton<PlayerController>
     private int _resX;
     private int _resY;
     private int _hZ;
+
+    public int totalCoin;
+    public int totalGem;
+    public int levelNo;
     
+    public float cardDisableTime;
+
     private void Awake()
     {
+        levelNo = 1;
         if (PlayerPrefs.HasKey("resX"))
         {
             _resX = PlayerPrefs.GetInt("resX");
