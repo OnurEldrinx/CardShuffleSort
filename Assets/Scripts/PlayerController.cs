@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -15,13 +13,17 @@ public class PlayerController : Singleton<PlayerController>
 
     private int _resX;
     private int _resY;
-    private int _hZ;
+    //private int _hZ;
 
     public int totalCoin;
     public int totalGem;
     public int levelNo;
     
     public float cardDisableTime;
+
+    public bool animationOnPlay;
+    
+    private Camera _mainCamera;
 
     private void Awake()
     {
@@ -30,7 +32,7 @@ public class PlayerController : Singleton<PlayerController>
         {
             _resX = PlayerPrefs.GetInt("resX");
             _resY = PlayerPrefs.GetInt("resY");
-            _hZ = PlayerPrefs.GetInt("hZ");
+            //_hZ = PlayerPrefs.GetInt("hZ");
         }
         else
         {
@@ -39,7 +41,7 @@ public class PlayerController : Singleton<PlayerController>
             PlayerPrefs.SetInt("hZ", Screen.currentResolution.refreshRate);
             _resX = PlayerPrefs.GetInt("resX");
             _resY = PlayerPrefs.GetInt("resY");
-            _hZ = PlayerPrefs.GetInt("hZ");
+            //_hZ = PlayerPrefs.GetInt("hZ");
 
         }
 
@@ -47,5 +49,32 @@ public class PlayerController : Singleton<PlayerController>
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 60;
     }
+
+    private void Start()
+    {
+        _mainCamera = Camera.main;
+    }
+
+    private void Update()
+    {
+        TouchHandler();
+    }
     
+    private void TouchHandler()
+    {
+        if (Input.touchCount <= 0) return;
+        
+        Touch touch = Input.GetTouch(0);
+
+        Ray ray = _mainCamera.ScreenPointToRay(touch.position);
+
+        if (!Physics.Raycast(ray, out var hit)) return;
+        
+        GameObject touchedObject = hit.collider.gameObject;
+
+        if (!touchedObject.TryGetComponent(out Slot s)) { return; }
+
+        if (touch.phase == TouchPhase.Began) { s.HandleTap(); }
+
+    }
 }

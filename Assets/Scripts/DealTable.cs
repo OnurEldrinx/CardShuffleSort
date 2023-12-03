@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,22 +20,14 @@ public class DealTable : MonoBehaviour
     {
 
         int cardCount = dealSlot.cardList.Count;
-        
-        if (cardCount > 0)
-        {
-            fillImage.sprite = UIManager.Instance.fillerSprites[dealSlot.cardList.Last().color];
-            
-        }
-        else
-        {
-            fillImage.fillAmount = Mathf.Lerp(fillImage.fillAmount,0,5f * Time.deltaTime);
-            if (fillImage.fillAmount < 0.01)
-            {
-                fillImage.fillAmount = 0;
-            }
-        }
 
+        if (cardCount != 0) return;
         
-
+        fillImage.fillAmount = Mathf.Lerp(fillImage.fillAmount,0,5f * Time.deltaTime);
+        if (fillImage.fillAmount < 0.01)
+        {
+            fillImage.fillAmount = 0;
+        }
+        
     }
 }
