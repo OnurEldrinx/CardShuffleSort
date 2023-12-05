@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -39,6 +40,10 @@ public class Slot : MonoBehaviour
         UpdateColliderCenter();
         _isEmpty = false;
         _topCardColor = cardList.Last().color;
+        if (_topCardColor != Colour.Empty && !GameManager.Instance.cardColors.Contains(_topCardColor))
+        {
+            GameManager.Instance.cardColors.Add(_topCardColor);
+        }
     }
 
     private void Update()
@@ -176,124 +181,7 @@ public class Slot : MonoBehaviour
         
     }
     
-    /*private void OnMouseOver()
-    {
-        
-        Debug.Log(gameObject.name);
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-            
-            if (status != SlotStatus.Active) return;
-            
-            if (PlayerController.Instance.fromSlot == null && !_isEmpty)
-            {
-                PlayerController.Instance.fromSlot = this;
-                PlayerController.Instance.toSlot = null;
-
-                int c = cardList.Count;
-                int topColorIndex = -1;
-                for (int i = 0; i < c; i++)
-                {
-                    if (cardList[i].color == _topCardColor)
-                    {
-
-                        if (topColorIndex == -1)
-                        {
-                            topColorIndex = i - 1;
-                        }
-                        
-                        Card temp = cardList[i];
-                        _cards.Push(temp);
-                        temp.transform.DOMoveY(temp.transform.position.y + 0.1f,0.2f);
-                    }
-                    
-                }
-                
-                _topCardColor = cardList[topColorIndex].color;
-                
-            }else if (PlayerController.Instance.fromSlot != null && PlayerController.Instance.fromSlot != this)
-            {
-                
-                PlayerController.Instance.toSlot = this;
-
-                if (_topCardColor != PlayerController.Instance.fromSlot._cards.Peek().color && _topCardColor != Colour.Empty)
-                {
-                    
-                    foreach (var card in PlayerController.Instance.fromSlot._cards)
-                    {
-                        float tempY = card.transform.position.y;
-                        card.transform.DOMoveY(tempY - 0.1f, 0.2f);
-                    }
-                    
-                    PlayerController.Instance.fromSlot._cards.Clear();
-                    PlayerController.Instance.fromSlot.UpdateSlotState();
-                    UpdateSlotState();
-                    PlayerController.Instance.fromSlot = null;
-                    PlayerController.Instance.toSlot = null;
-                    
-                    
-                    return;
-                }
-                
-                foreach (var c in PlayerController.Instance.fromSlot._cards)
-                {
-                    PlayerController.Instance.fromSlot.cardList.Remove(c);
-                }
-                
-                GetComponent<BoxCollider>().enabled = false;
-                
-                float d = PlayerController.Instance.totalDuration;
-                _cardCount = PlayerController.Instance.fromSlot._cards.Count;
-                _offset = cardList.Count == 0 ? 0 : cardList.Last().transform.position.y + 0.075f;
-                //float h = PlayerController.Instance.fromSlot._cards.Peek().transform.position.y;
-                
-                // Animation on play
-                PlayerController.Instance.animationOnPlay = true;
-                for (int i = 0; i < _cardCount; i++)
-                {
-                    Card last = PlayerController.Instance.fromSlot._cards.Pop();
-                    PlayerController.Instance.fromSlot.cardList.Remove(last);
-                    last.PlayAnimation(PlayerController.Instance.toSlot, d,PlayerController.Instance.height ,PlayerController.Instance.ease, _offset,0).OnComplete(
-                        () =>
-                        {
-
-                            if (gameObject.name.Equals("DealTableSlot"))
-                            {
-                                transform.parent.GetComponent<DealTable>().fillImage.fillAmount += 0.1f;
-                                //VFXManager.Instance.PlayParticleAtPosition(last.transform.position);
-                            }
-                            
-                        });
-                    cardList.Add(last);
-                    d += 0.075f;
-                    _offset += 0.075f;
-                    UpdateColliderSize(1);
-                    PlayerController.Instance.fromSlot.UpdateColliderSize(-1);
-                }
-                
-                
-                UpdateColliderCenter();
-                PlayerController.Instance.fromSlot.UpdateColliderCenter();
-                
-                PlayerController.Instance.fromSlot = null;
-                PlayerController.Instance.toSlot = null;
-                
-                Invoke(nameof(UpdateSlotState),d);
-
-                
-                
-                
-            }
-            
-        }
-        
-        
-    }*/
-
-    
-    
-    private void UpdateSlotState()
+    public void UpdateSlotState()
     {
         //Animation is done
         PlayerController.Instance.animationOnPlay = false;
@@ -363,20 +251,15 @@ public class Slot : MonoBehaviour
     {
         
         VFXManager.Instance.PlayCoinCollectAnimation(transform.position + new Vector3(0,ColliderSizeInc*2,0));
-
         
         _collider.enabled = true;
         UIManager.Instance.coinCounterText.text = PlayerController.Instance.totalCoin.ToString();
         float f = UIManager.Instance.levelProgressBar.fillAmount + (_cardCounter * 0.1f);
-        float extra = f > 1 ? f-1 : 0;
 
-        float d = 0.5f;
-        
-        DOTween.To(()=> UIManager.Instance.levelProgressBar.fillAmount, x=> UIManager.Instance.levelProgressBar.fillAmount = x, 1, d).
-            OnComplete(
+        /*DOTween.To(() => UIManager.Instance.levelProgressBar.fillAmount,
+            x => UIManager.Instance.levelProgressBar.fillAmount = x, 1, d).OnComplete(
             () =>
             {
-                
                 if (extra < 0) return;
                 UIManager.Instance.levelProgressBar.fillAmount = 0;
                 DOTween.To(() => UIManager.Instance.levelProgressBar.fillAmount,
@@ -385,22 +268,62 @@ public class Slot : MonoBehaviour
 
                 PlayerController.Instance.levelNo += 1;
                 UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
-                
+                //t.Play();
             }
-            );
-        
+        );*/
+
+        FillAnimation(f);
+    }
+
+    private void FillAnimation(float f)
+    {
+        if(f<=0) return;
+
+        UIManager.Instance.levelProgressBar.DOFillAmount(f, 0.5f).OnComplete(() =>
+        {
+            f -= 1;
+            if (Math.Abs(UIManager.Instance.levelProgressBar.fillAmount - 1) < 0.0001f) {
+                UIManager.Instance.levelProgressBar.fillAmount = 0;
+                PlayerController.Instance.levelNo += 1;
+                UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
+            }
+            FillAnimation(f);
+        });
         
     }
     
-    private void UpdateColliderSize(float sign)
+    public void UpdateColliderSize(float sign)
     {
         _collider.size += new Vector3(0, 0, sign * ColliderSizeInc);
+        if (!(_collider.size.z < 0)) return;
+        var size = _collider.size;
+        size = new Vector3(size.x, size.y, 0);
+        _collider.size = size;
     }
 
-    private void UpdateColliderCenter()
+    public void UpdateColliderCenter()
     {
         var center = _collider.center;
         _collider.center = new Vector3(center.x, center.y, _collider.size.z / 2);
+        if (!(_collider.center.z < 0)) return;
+        var size = _collider.center;
+        size = new Vector3(size.x, size.y, 0);
+        _collider.center = size;
+    }
+
+    public Colour GetTopColor()
+    {
+        return _topCardColor;
+    }
+
+    public void SetColliderAvailability(bool enable)
+    {
+        _collider.enabled = enable;
+    }
+
+    public void SetTopCardColor(Colour c)
+    {
+        _topCardColor = c;
     }
     
 }

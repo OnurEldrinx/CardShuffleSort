@@ -45,7 +45,10 @@ public class PlayerController : Singleton<PlayerController>
 
         }
 
-        Screen.SetResolution((int)(_resX * 0.75f),(int)(_resY * 0.75f), FullScreenMode.FullScreenWindow);
+        if (GameManager.Instance.degradeResolution)
+        {
+            Screen.SetResolution((int)(_resX * 0.75f),(int)(_resY * 0.75f), FullScreenMode.FullScreenWindow);
+        }
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 60;
     }
@@ -72,9 +75,20 @@ public class PlayerController : Singleton<PlayerController>
         
         GameObject touchedObject = hit.collider.gameObject;
 
-        if (!touchedObject.TryGetComponent(out Slot s)) { return; }
+        //if (!touchedObject.TryGetComponent(out Slot s)) { return; }
 
-        if (touch.phase == TouchPhase.Began) { s.HandleTap(); }
+        if (touch.phase == TouchPhase.Began)
+        {
+
+            if (touchedObject.TryGetComponent(out Slot slot))
+            {
+                slot.HandleTap();
+            }else if (touchedObject.TryGetComponent(out DealButton dealButton))
+            {
+                if (animationOnPlay)return;
+                dealButton.HandleTap();
+            }
+        }
 
     }
 }

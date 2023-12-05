@@ -147,4 +147,19 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
         return null;
     }
 
+    public Card GetCard(Colour colour)
+    {
+        Card result = colour switch
+        {
+            Colour.Red => GetRedCard(),
+            Colour.Yellow => GetYellowCard(),
+            Colour.Blue => GetBlueCard(),
+            Colour.Green => GetGreenCard(),
+            Colour.Black => GetBlackCard(),
+            _ => null
+        };
+
+        return result;
+    }
+
 }
