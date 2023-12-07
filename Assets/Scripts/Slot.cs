@@ -62,25 +62,38 @@ public class Slot : MonoBehaviour
                 PlayerController.Instance.toSlot = null;
 
                 int c = cardList.Count;
-                int topColorIndex = -1;
+                List<Card> tempCardList = new List<Card>(cardList);
+                Stack<Card> tempSelectedCards = new Stack<Card>();
+                
+                tempCardList.Reverse();
+
+                bool colorChanged=false;
                 for (int i = 0; i < c; i++)
                 {
-                    if (cardList[i].color == _topCardColor)
+                    if (tempCardList[i].color == _topCardColor)
                     {
-
-                        if (topColorIndex == -1)
-                        {
-                            topColorIndex = i - 1;
-                        }
-                        
-                        Card temp = cardList[i];
-                        _selectedCards.Push(temp);
+                        Card temp = tempCardList[i];
+                        tempSelectedCards.Push(temp);
                         temp.transform.DOMoveY(temp.transform.position.y + 0.1f,0.2f);
                     }
-                    
+                    else
+                    {
+                        _topCardColor = tempCardList[i].color;
+                        colorChanged = true;
+                        break;
+                    }
                 }
 
-                _topCardColor = topColorIndex != -1 ? cardList[topColorIndex].color : Colour.Empty;
+                int stackCount = tempSelectedCards.Count;
+                for (int i = 0; i < stackCount;i++)
+                {
+                    _selectedCards.Push(tempSelectedCards.Pop());
+                }
+
+                if (!colorChanged)
+                {
+                    _topCardColor = Colour.Empty;
+                }
                 
             }else if (PlayerController.Instance.fromSlot is not null && PlayerController.Instance.fromSlot != this)
             {
@@ -255,23 +268,7 @@ public class Slot : MonoBehaviour
         _collider.enabled = true;
         UIManager.Instance.coinCounterText.text = PlayerController.Instance.totalCoin.ToString();
         float f = UIManager.Instance.levelProgressBar.fillAmount + (_cardCounter * 0.1f);
-
-        /*DOTween.To(() => UIManager.Instance.levelProgressBar.fillAmount,
-            x => UIManager.Instance.levelProgressBar.fillAmount = x, 1, d).OnComplete(
-            () =>
-            {
-                if (extra < 0) return;
-                UIManager.Instance.levelProgressBar.fillAmount = 0;
-                DOTween.To(() => UIManager.Instance.levelProgressBar.fillAmount,
-                    x => UIManager.Instance.levelProgressBar.fillAmount = x, extra,
-                    d);
-
-                PlayerController.Instance.levelNo += 1;
-                UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
-                //t.Play();
-            }
-        );*/
-
+        
         FillAnimation(f);
     }
 
@@ -324,6 +321,11 @@ public class Slot : MonoBehaviour
     public void SetTopCardColor(Colour c)
     {
         _topCardColor = c;
+    }
+
+    public Stack<Card> GetSelectedCards()
+    {
+        return _selectedCards;
     }
     
 }

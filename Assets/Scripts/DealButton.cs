@@ -12,14 +12,28 @@ public class DealButton : MonoBehaviour
 
     public void HandleTap()
     {
+
+        if (PlayerController.Instance.fromSlot is not null)
+        {
+            foreach (var card in PlayerController.Instance.fromSlot.GetSelectedCards())
+            {
+                float tempY = card.transform.position.y;
+                card.transform.DOMoveY(tempY - 0.1f, 0.2f);
+            }
+                    
+            PlayerController.Instance.fromSlot.GetSelectedCards().Clear();
+            PlayerController.Instance.fromSlot.UpdateSlotState();
+            //PlayerController.Instance.toSlot.UpdateSlotState();
+            PlayerController.Instance.fromSlot = null;
+            PlayerController.Instance.toSlot = null;
+        }
         
         transform.DOScaleZ(0.5f,0.2f).OnComplete(() => transform.DOScaleZ(1.25f,0.2f));
 
-        float timer = 0.1f;
+        float timer = 0.25f;
         
         foreach (var slot in GameManager.Instance.GetActiveSlots())
         {
-            //Debug.Log(slot.name + "-" + slot.GetTopColor());
             StartCoroutine(SendCards(slot,timer));
             timer += 0.25f;
         }
@@ -65,7 +79,7 @@ public class DealButton : MonoBehaviour
             temp.transform.position = spawnSlot.transform.position;
             temp.gameObject.SetActive(true);
 
-            temp.PlayAnimation(target, d, PlayerController.Instance.height, PlayerController.Instance.ease, offset, 0);
+            temp.PlayAnimation(target, d, PlayerController.Instance.height*2, PlayerController.Instance.ease, offset, 0);
             target.cardList.Add(temp);
             d += 0.075f;
             offset += 0.075f;
@@ -75,7 +89,6 @@ public class DealButton : MonoBehaviour
         
         target.UpdateColliderCenter();
 
-        //Invoke(nameof(UpdateTargetSlotState),d);
         StartCoroutine(UpdateSlotState(target, d));
 
 

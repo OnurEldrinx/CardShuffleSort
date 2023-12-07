@@ -17,10 +17,10 @@ public class Card : MonoBehaviour
             Direction.South => new Vector3(currentRotation.x - 180, 0, 0),
             Direction.East => new Vector3(0, 0, currentRotation.z - 180),
             Direction.West => new Vector3(0, 0, currentRotation.z + 180),
-            Direction.NorthEast => new Vector3(currentRotation.x + 180, 0, 0),
-            Direction.NorthWest => new Vector3(currentRotation.x + 180, 0, 0),
-            Direction.SouthEast => new Vector3(currentRotation.x - 180, 0, 0),
-            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, 0),
+            Direction.NorthEast => new Vector3(currentRotation.x + 180, 0,  currentRotation.z + 180),
+            Direction.NorthWest => new Vector3(currentRotation.x - 180, 0, currentRotation.z + 180),
+            Direction.SouthEast => new Vector3(currentRotation.x - 180, 0,  currentRotation.z - 180),
+            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, currentRotation.z + 180),
             _ => rotationVector
         };
 
@@ -32,7 +32,6 @@ public class Card : MonoBehaviour
         transform.DORotate(rotationVector, duration).SetEase(e).SetDelay(delay).OnComplete(() =>
         {
             transform.rotation = Quaternion.Euler(Vector3.zero);
-            
         });
 
         return j;
