@@ -8,6 +8,7 @@ public class PlayerController : Singleton<PlayerController>
     
     // Animation Settings
     public float totalDuration;
+    public float delay;
     public float height;
     public Ease ease;
 
@@ -25,6 +26,8 @@ public class PlayerController : Singleton<PlayerController>
     
     private Camera _mainCamera;
 
+    public bool dealButtonActive;
+    
     private void Awake()
     {
         levelNo = 1;
@@ -60,6 +63,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Update()
     {
+        if (dealButtonActive) { return; }
         TouchHandler();
     }
     
@@ -86,6 +90,10 @@ public class PlayerController : Singleton<PlayerController>
             }else if (touchedObject.TryGetComponent(out DealButton dealButton))
             {
                 if (animationOnPlay)return;
+                if (!dealButtonActive)
+                {
+                    dealButtonActive = true;
+                }
                 dealButton.HandleTap();
             }
         }

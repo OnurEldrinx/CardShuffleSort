@@ -30,7 +30,7 @@ public class DealButton : MonoBehaviour
         
         transform.DOScaleZ(0.5f,0.2f).OnComplete(() => transform.DOScaleZ(1.25f,0.2f));
 
-        float timer = 0.25f;
+        float timer = 0.25f;// bigger than delay
         
         foreach (var slot in GameManager.Instance.GetActiveSlots())
         {
@@ -38,6 +38,15 @@ public class DealButton : MonoBehaviour
             timer += 0.25f;
         }
         
+        Invoke(nameof(SetDealButtonActive),timer + PlayerController.Instance.totalDuration);
+
+    }
+
+    private void SetDealButtonActive()
+    {
+
+        PlayerController.Instance.dealButtonActive = false;
+
     }
 
     IEnumerator SendCards(Slot slot,float timer)
@@ -72,6 +81,8 @@ public class DealButton : MonoBehaviour
         int colorIndex = Random.Range(0, colourOptions.Count);
 
         Colour spawnColour = colourOptions[colorIndex];
+
+        float delay = 0;
         
         for (int i = 0; i < SpawnSize; i++)
         {
@@ -79,9 +90,9 @@ public class DealButton : MonoBehaviour
             temp.transform.position = spawnSlot.transform.position;
             temp.gameObject.SetActive(true);
 
-            temp.PlayAnimation(target, d, PlayerController.Instance.height*2, PlayerController.Instance.ease, offset, 0);
+            temp.PlayAnimation(target, d, PlayerController.Instance.height*2, PlayerController.Instance.ease, offset, delay);
             target.cardList.Add(temp);
-            d += 0.075f;
+            delay += 0.075f;
             offset += 0.075f;
             target.UpdateColliderSize(1);
             
@@ -89,7 +100,7 @@ public class DealButton : MonoBehaviour
         
         target.UpdateColliderCenter();
 
-        StartCoroutine(UpdateSlotState(target, d));
+        StartCoroutine(UpdateSlotState(target, delay+d));
 
 
     }

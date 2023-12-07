@@ -1453,13 +1453,15 @@ MonoBehaviour:
   fromSlot: {fileID: 0}
   toSlot: {fileID: 0}
   totalDuration: 0.5
+  delay: 0.05
   height: 1.5
-  ease: 2
+  ease: 1
   totalCoin: 0
   totalGem: 0
   levelNo: 0
   cardDisableTime: 0.15
   animationOnPlay: 0
+  dealButtonActive: 0
 --- !u!114 &443899453 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2172359335897878577, guid: 60df2b783c5ccad488214748295475ba,
@@ -2132,7 +2134,7 @@ MonoBehaviour:
   - {fileID: 1138174354}
   - {fileID: 1927994469}
   cardColors: 
-  degradeResolution: 1
+  degradeResolution: 0
 --- !u!1 &587263258 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1089036204436606974, guid: be606f0c373ceb544be54f9382ef83a6,

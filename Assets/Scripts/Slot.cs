@@ -155,12 +155,13 @@ public class Slot : MonoBehaviour
                             break;
                     }
                 }
-                
+
+                float delay = 0; 
                 for (int i = 0; i < cardCount; i++)
                 {
                     Card last = PlayerController.Instance.fromSlot._selectedCards.Pop();
                     PlayerController.Instance.fromSlot.cardList.Remove(last);
-                    last.PlayAnimation(PlayerController.Instance.toSlot, d,PlayerController.Instance.height ,PlayerController.Instance.ease, _offset,0).OnComplete(
+                    last.PlayAnimation(PlayerController.Instance.toSlot, d,PlayerController.Instance.height ,PlayerController.Instance.ease, _offset,delay).OnComplete(
                         () =>
                         {
 
@@ -171,7 +172,7 @@ public class Slot : MonoBehaviour
                             
                         });
                     cardList.Add(last);
-                    d += 0.075f;
+                    delay += PlayerController.Instance.delay; //0.075f
                     _offset += 0.075f;
                     UpdateColliderSize(1);
                     PlayerController.Instance.fromSlot.UpdateColliderSize(-1);
@@ -184,7 +185,7 @@ public class Slot : MonoBehaviour
                 PlayerController.Instance.fromSlot = null;
                 PlayerController.Instance.toSlot = null;
                 
-                Invoke(nameof(UpdateSlotState),d);
+                Invoke(nameof(UpdateSlotState),delay+d);
 
                 
                 
