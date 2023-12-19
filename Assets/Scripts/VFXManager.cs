@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -9,9 +10,19 @@ public class VFXManager : Singleton<VFXManager>
     
     private Camera _mainCamera;
 
+    public readonly Dictionary<Colour, Color> colorMap = new();
+    
+
     private void Start()
     {
         _mainCamera = Camera.main;
+        
+        colorMap.Add(Colour.Red,Color.red);
+        colorMap.Add(Colour.Yellow,Color.yellow);
+        colorMap.Add(Colour.Blue,Color.blue);
+        colorMap.Add(Colour.Green,Color.green);
+        colorMap.Add(Colour.Black,Color.black);
+        
     }
 
     public void PlayParticleAtPosition(ParticleSystem p,Vector3 position)

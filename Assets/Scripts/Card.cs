@@ -17,15 +17,19 @@ public class Card : MonoBehaviour
             Direction.South => new Vector3(currentRotation.x - 180, 0, 0),
             Direction.East => new Vector3(0, 0, currentRotation.z - 180),
             Direction.West => new Vector3(0, 0, currentRotation.z + 180),
-            Direction.NorthEast => new Vector3(currentRotation.x + 180, 0,  currentRotation.z + 180),
+            Direction.NorthEast => new Vector3(currentRotation.x + 180, 0,  0),
+            Direction.NorthWest => new Vector3(currentRotation.x + 180, 0, 0),
+            Direction.SouthEast => new Vector3(currentRotation.x - 180, 0, 0),
+            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, 0),
+            /*Direction.NorthEast => new Vector3(currentRotation.x + 180, 0,  currentRotation.z + 180),
             Direction.NorthWest => new Vector3(currentRotation.x - 180, 0, currentRotation.z + 180),
             Direction.SouthEast => new Vector3(currentRotation.x - 180, 0,  currentRotation.z - 180),
-            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, currentRotation.z + 180),
+            Direction.SouthWest => new Vector3(currentRotation.x - 180, 0, currentRotation.z + 180),*/
             _ => rotationVector
         };
 
         var position = targetSlot.transform.position;
-        var p = new Vector3(position.x, 0 + offset, position.z);
+        var p = new Vector3(position.x, offset, position.z);
         
         
         Tween j = transform.DOJump(p,height,1,duration).SetEase(e).SetDelay(delay);

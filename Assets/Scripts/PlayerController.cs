@@ -11,7 +11,7 @@ public class PlayerController : Singleton<PlayerController>
     public float delay;
     public float height;
     public Ease ease;
-
+    
     private int _resX;
     private int _resY;
     //private int _hZ;
@@ -27,6 +27,8 @@ public class PlayerController : Singleton<PlayerController>
     private Camera _mainCamera;
 
     public bool dealButtonActive;
+
+    public float cardPositionOffsetY = 0.075f;
     
     private void Awake()
     {
@@ -86,7 +88,15 @@ public class PlayerController : Singleton<PlayerController>
 
             if (touchedObject.TryGetComponent(out Slot slot))
             {
-                slot.HandleTap();
+                switch (slot.status)
+                {
+                    case SlotStatus.Active:
+                        slot.HandleTap();
+                        break;
+                    case SlotStatus.Locked :
+                        print("Locked");
+                        break;
+                }
             }else if (touchedObject.TryGetComponent(out DealButton dealButton))
             {
                 if (animationOnPlay)return;

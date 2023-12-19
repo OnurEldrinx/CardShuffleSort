@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5883445878438128830}
   - component: {fileID: 8618644424726455832}
   - component: {fileID: 702396383261644743}
+  - component: {fileID: 4060031906013441373}
+  - component: {fileID: 1865035927049937234}
   m_Layer: 0
   m_Name: Slot
   m_TagString: Untagged
@@ -83,3 +85,31 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4060031906013441373
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278705783127567860}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0036756282, y: 0.0051458813, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1865035927049937234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278705783127567860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 586044ad93fb4044c979844964f10c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: []
+  status: 0
+  isDealTable: 0

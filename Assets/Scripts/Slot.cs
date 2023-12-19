@@ -11,7 +11,7 @@ public class Slot : MonoBehaviour
     [SerializeField] private bool isDealTable;
 
     private BoxCollider _collider;
-    private const float ColliderSizeInc = 0.08f;
+    private const float ColliderSizeInc = 0.075f;
     private bool _isEmpty;
     private Colour _topCardColor;
     private Stack<Card> _selectedCards; //selected cards with same color on top of the stack
@@ -19,6 +19,8 @@ public class Slot : MonoBehaviour
     private DealTable _dealTable;
     private static int _cardCounter; //for deal table animations
 
+    private bool _isDealButtonTarget;
+    
     private void Start()
     {
         _collider = GetComponent<BoxCollider>();
@@ -36,7 +38,7 @@ public class Slot : MonoBehaviour
         {
             UpdateColliderSize(1);
         }
-        
+
         UpdateColliderCenter();
         _isEmpty = false;
         _topCardColor = cardList.Last().color;
@@ -128,7 +130,7 @@ public class Slot : MonoBehaviour
                 
                 float d = PlayerController.Instance.totalDuration;
                 float cardCount = PlayerController.Instance.fromSlot._selectedCards.Count;
-                _offset = cardList.Count == 0 ? 0 : cardList.Last().transform.position.y + 0.075f;
+                _offset = cardList.Count == 0 ? 0 : cardList.Last().transform.position.y + PlayerController.Instance.cardPositionOffsetY;
                 
                 // Animation on play
                 PlayerController.Instance.animationOnPlay = true;
@@ -136,24 +138,7 @@ public class Slot : MonoBehaviour
                 // Set Fill Color
                 if (isDealTable)
                 {
-                    switch (PlayerController.Instance.fromSlot._selectedCards.Peek().color)
-                    {
-                        case Colour.Red:
-                            _dealTable.fillImage.color = Color.red;
-                            break;
-                        case Colour.Yellow:
-                            _dealTable.fillImage.color = Color.yellow;
-                            break;
-                        case Colour.Green:
-                            _dealTable.fillImage.color = Color.green;
-                            break;
-                        case Colour.Black:
-                            _dealTable.fillImage.color = Color.black;
-                            break;
-                        case Colour.Blue:
-                            _dealTable.fillImage.color = Color.blue;
-                            break;
-                    }
+                    _dealTable.fillImage.color = VFXManager.Instance.colorMap[PlayerController.Instance.fromSlot._selectedCards.Peek().color];
                 }
 
                 float delay = 0; 
@@ -173,7 +158,7 @@ public class Slot : MonoBehaviour
                         });
                     cardList.Add(last);
                     delay += PlayerController.Instance.delay; //0.075f
-                    _offset += 0.075f;
+                    _offset += PlayerController.Instance.cardPositionOffsetY;
                     UpdateColliderSize(1);
                     PlayerController.Instance.fromSlot.UpdateColliderSize(-1);
                 }
@@ -203,6 +188,32 @@ public class Slot : MonoBehaviour
         _topCardColor = cardList.Last().color;
 
 
+        if (_isDealButtonTarget)
+        {
+            //Check the list size
+            int diff = cardList.Count - 20;
+
+            if (diff > 0)
+            {
+                for (int i = 0; i < diff; i++)
+                {
+                    GameObject t = cardList[i].gameObject;
+                    t.SetActive(false);
+                    UpdateColliderSize(-1);
+                }
+                cardList.RemoveRange(0,diff);
+                float targetY = 0;
+                foreach (var t in cardList)
+                {
+                    t.transform.DOMoveY(targetY, 0.1f);
+                    targetY += 0.075f;
+                }
+                UpdateColliderCenter();
+            }
+
+            _isDealButtonTarget = false;
+        }
+        
         if (!isDealTable) return;
 
         int c = cardList.Count;
@@ -223,6 +234,8 @@ public class Slot : MonoBehaviour
         
         Invoke(nameof(LevelUp),timer+PlayerController.Instance.cardDisableTime);
         
+        
+        
     }
 
     private void SplashAndDisableCard()
@@ -231,24 +244,7 @@ public class Slot : MonoBehaviour
         ParticleSystem splash = ObjectPoolManager.Instance.GetSplash();
         var mainModule = splash.main;
         
-        switch (last.color)
-        {
-            case Colour.Red:
-                mainModule.startColor = Color.red;
-                break;
-            case Colour.Yellow:
-                mainModule.startColor = Color.yellow;
-                break;
-            case Colour.Green:
-                mainModule.startColor = Color.green;
-                break;
-            case Colour.Black:
-                mainModule.startColor = Color.black;
-                break;
-            case Colour.Blue:
-                mainModule.startColor = Color.blue;
-                break;
-        }
+        mainModule.startColor = VFXManager.Instance.colorMap[last.color];
         
         splash.gameObject.SetActive(true);
         if (cardList.Remove(last))
@@ -259,11 +255,14 @@ public class Slot : MonoBehaviour
             UpdateColliderSize(-1);
             UpdateColliderCenter();
         }
+        
+        
+        
     }
 
     private void LevelUp()
     {
-        
+
         VFXManager.Instance.PlayCoinCollectAnimation(transform.position + new Vector3(0,ColliderSizeInc*2,0));
         
         _collider.enabled = true;
@@ -283,6 +282,7 @@ public class Slot : MonoBehaviour
             if (Math.Abs(UIManager.Instance.levelProgressBar.fillAmount - 1) < 0.0001f) {
                 UIManager.Instance.levelProgressBar.fillAmount = 0;
                 PlayerController.Instance.levelNo += 1;
+                GameManager.Instance.UnlockNewColor();
                 UIManager.Instance.levelNoText.text = PlayerController.Instance.levelNo.ToString();
             }
             FillAnimation(f);
@@ -319,14 +319,14 @@ public class Slot : MonoBehaviour
         _collider.enabled = enable;
     }
 
-    public void SetTopCardColor(Colour c)
-    {
-        _topCardColor = c;
-    }
-
     public Stack<Card> GetSelectedCards()
     {
         return _selectedCards;
+    }
+
+    public void SetIsDealButtonTarget(bool b)
+    {
+        _isDealButtonTarget = b;
     }
     
 }

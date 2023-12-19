@@ -20,6 +20,10 @@ public class ObjectPoolManager : Singleton<ObjectPoolManager>
     public List<Card> blackCardPool;
     public int cardPoolSize;
     
+    
+    
+    
+    
     private void Start()
     {
 
